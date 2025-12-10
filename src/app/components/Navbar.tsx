@@ -50,19 +50,30 @@ export default function Navbar() {
 
         {/* Sağ Butonlar */}
         <div className="flex space-x-4 text-sm font-medium">
-          <a 
-            href="/magaza" 
-            className={`px-4 py-2 rounded-full border ${scrolled ? 'border-white hover:bg-white hover:text-gray-900' : 'border-transparent hover:bg-white/10'}`}
-          >
-            Mağaza
-          </a>
-          <a 
-            href="/girisyap" 
-            className="px-4 py-2 rounded-full border border-white bg-white text-gray-900 hover:bg-gray-300 transition duration-300"
-          >
-            Giriş Yap
-          </a>
-        </div>
+            {/* MAĞAZA Butonu: Şeffafken sadece beyaz kenarlık, kaydırılmışken dolgulu olsun */}
+            <a 
+                href="/magaza" 
+                className={`px-4 py-2 rounded-full border transition duration-300 ${
+                scrolled 
+                    ? 'border-transparent bg-gray-700 text-white hover:bg-gray-600' // Koyu Navbar'a uyum
+                    : 'border-white text-white bg-transparent hover:bg-white/10' // Şeffaf Navbar'a uyum
+                }`}
+            >
+                Mağaza
+            </a>
+            
+            {/* GİRİŞ YAP Butonu: Rengini kaydırmaya göre dinamik değiştiriyoruz */}
+            <a 
+  href="/girisyap" 
+  className={`px-4 py-2 rounded-full border transition duration-300 ${
+    scrolled 
+      ? 'border-transparent bg-white text-gray-900 hover:bg-gray-300' // Sayfa Kaydırılmış: Beyaz dolgulu
+      : 'border-white bg-transparent text-white hover:bg-white/10'    // Şeffaf: Şeffaf dolgulu, beyaz kenarlı
+  }`}
+>
+  Giriş Yap
+</a>
+            </div>
       </div>
     </header>
   );
