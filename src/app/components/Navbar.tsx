@@ -1,32 +1,69 @@
-import Link from 'next/link';
+"use client"; // Hook kullanacağımız için İstemci Bileşeni olarak işaretliyoruz
+
+import { useState, useEffect } from 'react';
 
 export default function Navbar() {
+  // Kaydırma (scroll) durumunu tutar
+  const [scrolled, setScrolled] = useState(false);
+
+  // Kaydırma olayını dinleyen fonksiyon
+  const handleScroll = () => {
+    // Sayfanın dikey kaydırma konumu (scrollTop) 100 pikselden büyükse true yapar
+    if (window.scrollY > 100) {
+      setScrolled(true);
+    } else {
+      setScrolled(false);
+    }
+  };
+
+  // Bileşen yüklendiğinde ve kaldırıldığında çalışan hook
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    
+    // Bileşen kaldırıldığında olay dinleyiciyi temizle
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []); // Sadece bir kez çalışır
+
   return (
-    // Navbar'ı ekranın üstüne sabitleyen ve şeffaf bir arka plan veren Tailwind sınıfları
-    // z-50 ile her zaman en üstte kalmasını sağlıyoruz
-    <nav className="fixed top-0 left-0 right-0 z-50 p-6 flex justify-between items-center bg-transparent text-white">
-      
-      {/* Sol Logo Bölümü */}
-      <Link href="/" className="text-xl font-bold tracking-widest hover:opacity-80 transition duration-300">
-        RIVIAN
-      </Link>
+    // scrolled state'ine göre sınıfları dinamik olarak belirliyoruz
+    <header 
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out 
+        ${scrolled ? 'bg-gray-900 shadow-lg text-white' : 'bg-transparent text-white'}`
+      }
+    >
+      <div className="flex justify-between items-center h-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Sol Logo */}
+        <div className="text-xl font-extrabold tracking-widest cursor-pointer">
+          RIVIAN
+        </div>
 
-      {/* Orta Navigasyon Linkleri (Geniş ekranlar için) */}
-      {/* Tailwind'in hidden/md:flex sınıflarını geri getirdik (Mobil menüyü gizler) */}
-      <div className="hidden md:flex space-x-10 text-sm font-medium tracking-wide">
-        <Link href="/r1s" className="hover:text-gray-300 transition duration-300">R1S</Link>
-        <Link href="/r1t" className="hover:text-gray-300 transition duration-300">R1T</Link>
-        <Link href="/vehicles" className="hover:text-gray-300 transition duration-300">Araçlar</Link>
-        <Link href="/adventure-network" className="hover:text-gray-300 transition duration-300">Ağ</Link>
-      </div>
+        {/* Orta Navigasyon Linkleri */}
+        <nav className="hidden md:flex space-x-8 text-sm font-medium">
+          <a href="/r1s" className="hover:text-gray-300">R1S</a>
+          <a href="/r1t" className="hover:text-gray-300">R1T</a>
+          <a href="/araclar" className="hover:text-gray-300">Araçlar</a>
+          <a href="/ag" className="hover:text-gray-300">Ağ</a>
+        </nav>
 
-      {/* Sağ Menü / Butonlar */}
-      <div className="flex items-center space-x-6">
-        <Link href="/shop" className="text-sm font-medium hover:text-gray-300 transition duration-300 hidden sm:inline">Mağaza</Link>
-        <button className="text-sm border border-white rounded-full px-4 py-1.5 hover:bg-white hover:text-black transition duration-300 font-semibold">
-          Giriş Yap
-        </button>
+        {/* Sağ Butonlar */}
+        <div className="flex space-x-4 text-sm font-medium">
+          <a 
+            href="/magaza" 
+            className={`px-4 py-2 rounded-full border ${scrolled ? 'border-white hover:bg-white hover:text-gray-900' : 'border-transparent hover:bg-white/10'}`}
+          >
+            Mağaza
+          </a>
+          <a 
+            href="/girisyap" 
+            className="px-4 py-2 rounded-full border border-white bg-white text-gray-900 hover:bg-gray-300 transition duration-300"
+          >
+            Giriş Yap
+          </a>
+        </div>
       </div>
-    </nav>
+    </header>
   );
 }
